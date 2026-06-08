@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.practicum.shareit.base.exceptions.DuplicateDataException;
 import ru.practicum.shareit.base.exceptions.NotFoundException;
+import ru.practicum.shareit.base.exceptions.UserValidationException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,9 @@ public final class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handle(final NotFoundException e) {
+        if (e instanceof UserValidationException) {
+            log.debug("User validation failed.");
+        }
         return new ErrorResponse(e.getMessage());
     }
 

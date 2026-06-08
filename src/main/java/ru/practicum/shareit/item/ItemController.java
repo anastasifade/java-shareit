@@ -22,24 +22,28 @@ public final class ItemController {
 
     @GetMapping
     public Collection<ResponseItemDto> findByOwner(@RequestHeader("X-Sharer-User-Id") long userId) {
+        log.info("GET /items request received by ItemController. [X-Sharer-User-Id = {}]", userId);
         return itemService.findByOwner(userId);
     }
 
     @GetMapping("/{itemId}")
     public ResponseItemDto findById(@RequestHeader("X-Sharer-User-Id") long userId,
                                     @PathVariable long itemId) {
+        log.info("GET /items/{} request received by ItemController. [X-Sharer-User-Id = {}]", itemId, userId);
         return itemService.findById(userId, itemId);
     }
 
     @GetMapping("/search")
     public Collection<ResponseItemDto> search(@RequestHeader("X-Sharer-User-Id") long userId,
                                               @RequestParam String text) {
+        log.info("GET /items/search?text={} request received by ItemController. [X-Sharer-User-Id = {}]", text, userId);
         return itemService.search(userId, text);
     }
 
     @PostMapping
     public ResponseItemDto create(@RequestHeader("X-Sharer-User-Id") long userId,
                                   @Valid @RequestBody NewItemDto dto) {
+        log.info("POST /items request received by ItemController. [X-Sharer-User-Id = {}]", userId);
         return itemService.create(userId, dto);
     }
 
@@ -47,6 +51,7 @@ public final class ItemController {
     public ResponseItemDto update(@RequestHeader("X-Sharer-User-Id") long userId,
                                   @PathVariable long itemId,
                                   @Valid @RequestBody UpdateItemDto dto) {
+        log.info("PATCH /items/{} request received by ItemController. [X-Sharer-User-Id = {}]", itemId, userId);
         return itemService.update(userId, itemId, dto);
     }
 
@@ -54,6 +59,7 @@ public final class ItemController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@RequestHeader("X-Sharer-User-Id") long userId,
                        @PathVariable long itemId) {
+        log.info("DELETE /items/{} request received by ItemController. [X-Sharer-User-Id = {}]", itemId, userId);
         itemService.delete(userId, itemId);
     }
 

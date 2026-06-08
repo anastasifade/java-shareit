@@ -18,6 +18,7 @@ public class InMemoryItemStorage extends InMemoryStorage<Item> implements ItemSt
 
     @Override
     public Collection<Item> findByOwner(long ownerId) {
+        log.trace("GET /items request for user [id={}] received by in-memory item storage.", ownerId);
         return storage.values()
                 .stream()
                 .filter(item -> item.getOwner().getId() == ownerId)
@@ -26,6 +27,7 @@ public class InMemoryItemStorage extends InMemoryStorage<Item> implements ItemSt
 
     @Override
     public Collection<Item> search(String text) {
+        log.trace("Search request for [text = {}] received by in-memory item storage.", text);
         return storage.values()
                 .stream()
                 .filter(item -> item.isAvailable())
@@ -36,12 +38,15 @@ public class InMemoryItemStorage extends InMemoryStorage<Item> implements ItemSt
 
     @Override
     public Item create(Item item) {
+        log.trace("Create request received by in-memory item storage, [item={}].", item);
         item.setId(getNextId());
+        log.debug("Item assigned id: {}.", item.getId());
         return insert(item.getId(), item);
     }
 
     @Override
     public Item update(Item item) {
+        log.trace("Update request received by in-memory item storage, [item={}].", item);
         return insert(item.getId(), item);
     }
 }
