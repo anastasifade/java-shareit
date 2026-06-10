@@ -10,7 +10,7 @@ import ru.practicum.shareit.user.model.User;
 @UtilityClass
 public final class ItemMapper {
 
-    public static ResponseItemDto toDto(Item item) {
+    public ResponseItemDto toDto(Item item) {
         return ResponseItemDto.builder()
                 .id(item.getId())
                 .name(item.getName())
@@ -19,7 +19,7 @@ public final class ItemMapper {
                 .build();
     }
 
-    public static Item toItem(NewItemDto dto, User owner) {
+    public Item toItem(NewItemDto dto, User owner) {
         return Item.builder()
                 .name(dto.getName().trim())
                 .description(dto.getDescription().trim())
@@ -28,7 +28,7 @@ public final class ItemMapper {
                 .build();
     }
 
-    public static Item toItem(UpdateItemDto dto, Item item) {
+    public Item toItem(UpdateItemDto dto, Item item) {
         return Item.builder()
                 .id(item.getId())
                 .name(dto.getName() == null ? item.getName() : dto.getName().trim())

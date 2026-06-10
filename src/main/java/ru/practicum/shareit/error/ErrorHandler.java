@@ -11,6 +11,7 @@ import ru.practicum.shareit.base.exceptions.NotFoundException;
 import ru.practicum.shareit.base.exceptions.UserValidationException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -39,6 +40,14 @@ public final class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handle(final DuplicateDataException e) {
+        return new ErrorResponse(e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handle(final Throwable e) {
+        log.error("Internal server error: {}.", e.getMessage());
+        log.debug("Error details: {}.", Arrays.toString(e.getStackTrace()));
         return new ErrorResponse(e.getMessage());
     }
 
