@@ -2,7 +2,7 @@ package ru.practicum.shareit.user.dto;
 
 import jakarta.validation.constraints.Email;
 import lombok.Value;
-import ru.practicum.shareit.validation.NullOrNotBlank;
+import ru.practicum.shareit.base.validation.NullOrNotBlank;
 
 @Value
 public class UpdateUserDto {
