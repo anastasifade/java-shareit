@@ -79,9 +79,20 @@ public class ItemServiceImpl implements ItemService {
         Item item = itemRepository.findById(itemId).orElseThrow(() ->
                 new NotFoundException(String.format("Item with id=[%s] not found.", itemId)));
 
+        /* в связи с расхождениями требований в ТЗ
+         * (просмотр последнего и следующего бронирования доступен только для владельца)
+         *
+         * и требований в Postman-тестах
+         * (в ответе на запрос GET/items/{id} ожидается наличие полей последнего и следующего броинрования
+         * вне зависимости от статуса пользователя, ввыполнившего запрос)
+         *
+         * - метод возвращает объект OwnerItemDto, при этом поля lastBooking и nextBooking оставются пустыми,
+         *   если пользователь не является владельцем вещи
+        */
+
         return item.getOwner().getId() == userId ?
                 oneToOwnerDto(item, getCommentsForItem(item)) :
-                ItemMapper.toDto(item, getCommentsForItem(item));
+                ItemMapper.toOwnerDto(item, null, null, getCommentsForItem(item));
     }
 
     @Override
