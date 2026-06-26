@@ -57,6 +57,7 @@ public final class ItemController {
     public ResponseCommentDto createComment(@RequestHeader(X_SHARER_USER_ID) long userId,
                                             @PathVariable("itemId") long itemId,
                                             @Valid @RequestBody CommentDto dto) {
+        log.info("POST /items/{}/comment request received by ItemController. [X-Sharer-User-Id = {}]", itemId, userId);
         return itemService.createComment(userId, itemId, dto);
     }
 

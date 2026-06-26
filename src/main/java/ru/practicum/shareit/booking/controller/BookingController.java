@@ -27,18 +27,22 @@ public final class BookingController {
     @GetMapping
     public Collection<ResponseBookingDto> findAllAsBooker(@RequestHeader(X_SHARER_USER_ID) long userId,
                                                           @RequestParam(defaultValue = "ALL") BookingSearch state) {
+        log.info("GET /bookings?state={} request received by BookingController. [X-Sharer-User-Id = {}]", state, userId);
         return service.findAll(userId, Role.BOOKER, state);
     }
 
     @GetMapping("/owner")
     public Collection<ResponseBookingDto> findAllAsOwner(@RequestHeader(X_SHARER_USER_ID) long userId,
                                                           @RequestParam(defaultValue = "ALL") BookingSearch state) {
+        log.info("GET /bookings?state={}/owner request received by Booking Controller. [X-Sharer-User-Id = {}]",
+                state, userId);
         return service.findAll(userId, Role.OWNER, state);
     }
 
     @GetMapping("/{id}")
     public ResponseBookingDto findById(@RequestHeader(X_SHARER_USER_ID) long userId,
                                        @PathVariable("id") long bookingId) {
+        log.info("GET /bookings/{} request received by BookingController. [X-Sharer-User-Id = {}]", bookingId, userId);
         return service.findById(userId, bookingId);
     }
 
@@ -46,6 +50,7 @@ public final class BookingController {
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseBookingDto create(@RequestHeader(X_SHARER_USER_ID) long userId,
                                      @Valid @RequestBody NewBookingDto dto) {
+        log.info("POST /bookings request received by BookingController. [X-Sharer-User-Id = {}]", userId);
         return service.create(userId, dto);
     }
 
@@ -53,6 +58,8 @@ public final class BookingController {
     public ResponseBookingDto updateStatus(@RequestHeader(X_SHARER_USER_ID) long userId,
                                            @PathVariable("id") long bookingId,
                                            @RequestParam boolean approved) {
+        log.info("PATCH /bookings/{}?approved={} request received by BookingController. [X-Sharer-User-Id = {}]",
+                bookingId, approved, userId);
         BookingStatus status = approved ? BookingStatus.APPROVED : BookingStatus.REJECTED;
         return service.updateStatus(userId, bookingId, status);
     }

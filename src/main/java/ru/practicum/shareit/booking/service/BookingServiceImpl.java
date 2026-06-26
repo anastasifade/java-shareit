@@ -39,6 +39,10 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public Collection<ResponseBookingDto> findAll(long userId, Role userRole, BookingSearch filter) {
         userService.validateUser(userId);
+
+        log.debug("Request for all bookings [search filter = {}] by user[role = {}, id = {}] received by BookingService.",
+                filter, userRole, userId);
+
         BooleanExpression exp = getBooleanExpression(filter, userRole, userId);
         return StreamSupport.stream(bookingRepository.findAll(exp, SORT_BY_DATE).spliterator(), false)
                 .map(BookingMapper::toDto)
@@ -48,10 +52,13 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public ResponseBookingDto findById(long userId, long bookingId) {
         userService.validateUser(userId);
-        Booking booking = getBooking(bookingId);
 
+        log.debug("Request for booking [id={}] by user [id={}] received by BookingService.", bookingId, userId);
+
+        Booking booking = getBooking(bookingId);
         if (booking.getBooker().getId() != userId
                 && booking.getItem().getOwner().getId() != userId) {
+            log.warn("User [id={}] has no authorized access to booking [id={}].", userId, bookingId);
             throw new UserValidationException(String.format("Access to booking [id=%d] denied.", bookingId));
         }
 
@@ -64,7 +71,12 @@ public class BookingServiceImpl implements BookingService {
         User booker = userService.getUser(userId);
         Item item = itemService.getItem(dto.getItemId());
 
+        log.debug("Request to book item [id={}] by user [id={}] received by BookingService.",
+                item.getId(), userId);
+        log.trace("Booking request details: {}.", dto);
+
         if (!item.isAvailable()) {
+            log.warn("Item [id={}] is unavailable for booking. Request denied.", item.getId());
             throw new ItemUnavailableException("Item is unavailable for booking.");
         }
 
@@ -77,7 +89,11 @@ public class BookingServiceImpl implements BookingService {
         userService.validateUser(userId);
         Booking booking = getBooking(bookingId);
 
+        log.debug("Request to update booking [id={}] status to {} by user [id={}] received by BookingService.",
+                bookingId, status, userId);
+
         if (booking.getItem().getOwner().getId() != userId) {
+            log.warn("Booking status update denied: user [id={}] does not have access to modify booking.", userId);
             throw new UserValidationException(String.format("Access to booking [id=%d] denied.", bookingId));
         }
 

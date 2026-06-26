@@ -117,12 +117,16 @@ public class ItemServiceImpl implements ItemService {
         User user = userService.getUser(userId);
         Item item = getItem(itemId);
 
+        log.debug("Create request for a comment, author [id={}], item [id={}] received by ItemService.", userId, itemId);
+        log.trace("Creating comment: {}.", dto);
+
         boolean validCommentRequest = bookingRepository
                 .exists(QBooking.booking.item.id.eq(itemId)
                 .and(QBooking.booking.booker.id.eq(userId))
                 .and(QBooking.booking.start.before(LocalDateTime.now())));
 
         if (!validCommentRequest) {
+            log.warn("User [id={}] not authorized to leave a comment on item [id={}].", userId, itemId);
             throw new CommentRequestException("Only users who have previously borrowed the item may leave a comment.");
         }
 
