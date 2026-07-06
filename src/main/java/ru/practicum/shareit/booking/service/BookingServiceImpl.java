@@ -85,9 +85,11 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Transactional
-    public ResponseBookingDto updateStatus(long userId, long bookingId, BookingStatus status) {
+    public ResponseBookingDto updateStatus(long userId, long bookingId, boolean approved) {
         userService.validateUser(userId);
         Booking booking = getBooking(bookingId);
+
+        BookingStatus status = getNewStatus(approved, booking.getStatus());
 
         log.debug("Request to update booking [id={}] status to {} by user [id={}] received by BookingService.",
                 bookingId, status, userId);
@@ -131,6 +133,21 @@ public class BookingServiceImpl implements BookingService {
             }
             default -> {
                 return exp;
+            }
+        }
+    }
+
+    private BookingStatus getNewStatus(boolean approved, BookingStatus oldStatus) {
+        if (approved) {
+            return BookingStatus.APPROVED;
+        }
+
+        switch (oldStatus) {
+            case APPROVED, CANCELED -> {
+                return BookingStatus.CANCELED;
+            }
+            default -> {
+                return BookingStatus.REJECTED;
             }
         }
     }

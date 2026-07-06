@@ -9,6 +9,7 @@ import ru.practicum.shareit.base.exceptions.NotFoundException;
 import ru.practicum.shareit.base.exceptions.UserValidationException;
 import ru.practicum.shareit.booking.dal.BookingRepository;
 import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.model.QBooking;
 import ru.practicum.shareit.item.dal.CommentRepository;
 import ru.practicum.shareit.item.dal.ItemRepository;
@@ -76,8 +77,7 @@ public class ItemServiceImpl implements ItemService {
     public ResponseItemDto findById(long userId, long itemId) {
         userService.validateUser(userId);
         log.debug("Request for item [id={}] received by ItemService.", itemId);
-        Item item = itemRepository.findById(itemId).orElseThrow(() ->
-                new NotFoundException(String.format("Item with id=[%s] not found.", itemId)));
+        Item item = getItem(itemId);
 
         /* в связи с расхождениями требований в ТЗ
          * (просмотр последнего и следующего бронирования доступен только для владельца)
@@ -122,8 +122,9 @@ public class ItemServiceImpl implements ItemService {
 
         boolean validCommentRequest = bookingRepository
                 .exists(QBooking.booking.item.id.eq(itemId)
-                .and(QBooking.booking.booker.id.eq(userId))
-                .and(QBooking.booking.start.before(LocalDateTime.now())));
+                        .and(QBooking.booking.booker.id.eq(userId))
+                        .and(QBooking.booking.status.eq(BookingStatus.APPROVED))
+                        .and(QBooking.booking.start.before(LocalDateTime.now())));
 
         if (!validCommentRequest) {
             log.warn("User [id={}] not authorized to leave a comment on item [id={}].", userId, itemId);

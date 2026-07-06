@@ -17,6 +17,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long>, Queryds
             from Booking b
             where b.item in :items
             and b.start >= current_timestamp
+            and status = 'APPROVED'
             """)
     public Collection<Booking> findFutureBookingsForItems(@Param("items") Collection<Item> items);
 
@@ -25,6 +26,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long>, Queryds
             from Booking b
             where b.item in :items
             and b.end <= current_timestamp
+            and status = 'APPROVED'
             """)
     public Collection<Booking> findPastBookingsForItems(@Param("items") Collection<Item> items);
 
@@ -33,6 +35,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long>, Queryds
             from Booking b
             where b.item = :item
             and b.start >= current_timestamp
+            and status = 'APPROVED'
             order by b.start
             limit 1
             """)
@@ -43,6 +46,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long>, Queryds
             from Booking b
             where b.item = :item
             and b.end <= current_timestamp
+            and status = 'APPROVED'
             order by b.end desc
             limit 1
             """)

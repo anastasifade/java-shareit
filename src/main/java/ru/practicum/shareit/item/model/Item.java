@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import ru.practicum.shareit.request.ItemRequest;
 import ru.practicum.shareit.user.model.User;
 
@@ -14,6 +15,7 @@ import java.util.List;
 @Setter
 @EqualsAndHashCode(of = "id")
 @Table(name = "items")
+@ToString
 public final class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
