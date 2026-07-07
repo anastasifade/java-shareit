@@ -12,4 +12,5 @@ public class NewItemDto {
     String description;
     @NotNull(message = "Validation error: item availability status must be specified.")
     Boolean available;
+    Long requestId;
 }

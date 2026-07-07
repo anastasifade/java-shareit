@@ -8,7 +8,7 @@ import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.json.JsonContent;
 import ru.practicum.shareit.booking.dto.ResponseBookingDto;
 import ru.practicum.shareit.booking.model.BookingStatus;
-import ru.practicum.shareit.item.dto.item.BookingItemDto;
+import ru.practicum.shareit.item.dto.item.ItemNameDto;
 import ru.practicum.shareit.item.dto.item.OwnerItemDto;
 import ru.practicum.shareit.item.dto.item.ResponseItemDto;
 import ru.practicum.shareit.user.dto.ResponseUserDto;
@@ -54,7 +54,7 @@ public class ItemDtoJsonTests {
 
     @Test
     void testOwnerItemDto() throws IOException {
-        BookingItemDto itemDto = BookingItemDto.builder()
+        ItemNameDto itemDto = ItemNameDto.builder()
                 .id(1L)
                 .name(NAME)
                 .build();

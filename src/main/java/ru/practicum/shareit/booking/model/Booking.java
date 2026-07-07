@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @EqualsAndHashCode(of = "id")
 @Table(name = "bookings")
+@Data
 public final class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

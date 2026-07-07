@@ -37,8 +37,8 @@ public class ItemMapper {
                         .toList());
     }
 
-    public BookingItemDto toBookingItemDto(Item item) {
-        return BookingItemDto.builder()
+    public ItemNameDto toBookingItemDto(Item item) {
+        return ItemNameDto.builder()
                 .id(item.getId())
                 .name(item.getName())
                 .build();

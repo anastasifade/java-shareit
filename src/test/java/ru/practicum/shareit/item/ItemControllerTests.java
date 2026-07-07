@@ -42,7 +42,7 @@ public class ItemControllerTests {
 
     private static final ResponseBookingDto BOOKING_DTO = ResponseBookingDto.builder()
             .id(1L)
-            .item(BookingItemDto.builder().id(1L).name(NAME).build())
+            .item(ItemNameDto.builder().id(1L).name(NAME).build())
             .start(LocalDateTime.of(2026, 1, 1, 10, 0))
             .end(LocalDateTime.of(2026, 1, 3, 10, 0))
             .status(BookingStatus.APPROVED)
@@ -137,7 +137,7 @@ public class ItemControllerTests {
 
     @Test
     void testCreateItem() throws Exception {
-        NewItemDto dto = new NewItemDto(NAME, DESCRIPTION, true);
+        NewItemDto dto = new NewItemDto(NAME, DESCRIPTION, true, null);
 
         Item item = ItemMapper.toItem(dto, null);
         item.setId(1L);
@@ -166,7 +166,7 @@ public class ItemControllerTests {
 
     @Test
     void testCreateItem_invalidName() throws Exception {
-        NewItemDto blankName = new NewItemDto("  ", DESCRIPTION, true);
+        NewItemDto blankName = new NewItemDto("  ", DESCRIPTION, true, null);
         mvc.perform(post(ITEMS_URL)
                         .content(mapper.writeValueAsString(blankName))
                         .characterEncoding(StandardCharsets.UTF_8)
@@ -176,7 +176,7 @@ public class ItemControllerTests {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message", is("[Validation error: item name cannot be blank.]")));
 
-        NewItemDto nullName = new NewItemDto(null, DESCRIPTION, true);
+        NewItemDto nullName = new NewItemDto(null, DESCRIPTION, true, null);
         mvc.perform(post(ITEMS_URL)
                         .content(mapper.writeValueAsString(nullName))
                         .characterEncoding(StandardCharsets.UTF_8)
@@ -191,7 +191,7 @@ public class ItemControllerTests {
 
     @Test
     void testCreateItem_invalidDescription() throws Exception {
-        NewItemDto blankDescription = new NewItemDto(NAME, "   ", true);
+        NewItemDto blankDescription = new NewItemDto(NAME, "   ", true, null);
         mvc.perform(post(ITEMS_URL)
                         .content(mapper.writeValueAsString(blankDescription))
                         .characterEncoding(StandardCharsets.UTF_8)
@@ -202,7 +202,7 @@ public class ItemControllerTests {
                 .andExpect(jsonPath("$.message",
                         is("[Validation error: item description cannot be blank.]")));
 
-        NewItemDto nullDescription = new NewItemDto(NAME, null, true);
+        NewItemDto nullDescription = new NewItemDto(NAME, null, true, null);
         mvc.perform(post(ITEMS_URL)
                         .content(mapper.writeValueAsString(nullDescription))
                         .characterEncoding(StandardCharsets.UTF_8)
@@ -218,7 +218,7 @@ public class ItemControllerTests {
 
     @Test
     void testCreateItem_invalidAvailability() throws Exception {
-        NewItemDto dto = new NewItemDto(NAME, DESCRIPTION, null);
+        NewItemDto dto = new NewItemDto(NAME, DESCRIPTION, null, null);
 
         mvc.perform(post(ITEMS_URL)
                         .content(mapper.writeValueAsString(dto))

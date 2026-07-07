@@ -23,6 +23,8 @@ import ru.practicum.shareit.item.dto.item.ResponseItemDto;
 import ru.practicum.shareit.item.dto.item.UpdateItemDto;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.dal.RequestRepository;
+import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
@@ -42,6 +44,7 @@ public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
+    private final RequestRepository requestRepository;
 
     private final UserService userService;
 
@@ -95,6 +98,16 @@ public class ItemServiceImpl implements ItemService {
                 ItemMapper.toOwnerDto(item, null, null, getCommentsForItem(item));
     }
 
+    public Collection<Item> findByRequests(List<ItemRequest> requests) {
+        if (requests == null || requests.isEmpty()) {
+            return List.of();
+        }
+
+        return itemRepository.findByRequestIdIn(requests.stream()
+                .map(request -> request.getId())
+                .toList());
+    }
+
     @Override
     public Item getItem(long id) {
         return itemRepository.findById(id).orElseThrow(() ->
@@ -108,6 +121,12 @@ public class ItemServiceImpl implements ItemService {
         log.debug("Create request for an item, owner [id={}] received by ItemService.", userId);
         log.trace("Creating item: {}.", dto);
         Item item = ItemMapper.toItem(dto, owner);
+
+        if (dto.getRequestId() != null) {
+            item.setRequest(requestRepository.findById(dto.getRequestId()).orElseThrow(() ->
+                    new NotFoundException(String.format("Item request [id = %d] not found.", dto.getRequestId()))));
+        }
+
         return ItemMapper.toDto(itemRepository.save(item), List.of());
     }
 

@@ -37,7 +37,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class ItemServiceTests {
 
-    private static final NewItemDto TEST_ITEM = new NewItemDto("name", "desc", true);
+    private static final NewItemDto TEST_ITEM =
+            new NewItemDto("name", "desc", true, null);
     private static final CommentDto TEST_COMMENT = new CommentDto("comment_text");
 
     private final ItemService itemService;
@@ -103,7 +104,7 @@ public class ItemServiceTests {
     @Test
     void search_shouldReturnItems_whereName_containsText() {
         itemService.create(itemOwner.getId(), TEST_ITEM);
-        itemService.create(itemOwner.getId(), new NewItemDto("a", "b", true));
+        itemService.create(itemOwner.getId(), new NewItemDto("a", "b", true, null));
 
         Collection<? extends ResponseItemDto> result = itemService.search(itemOwner.getId(), TEST_ITEM.getName());
 
@@ -114,7 +115,7 @@ public class ItemServiceTests {
     @Test
     void search_shouldReturnItems_whereDescription_containsText() {
         itemService.create(itemOwner.getId(), TEST_ITEM);
-        itemService.create(itemOwner.getId(), new NewItemDto("a", "b", true));
+        itemService.create(itemOwner.getId(), new NewItemDto("a", "b", true, null));
 
         Collection<? extends ResponseItemDto> result =
                 itemService.search(itemOwner.getId(), TEST_ITEM.getDescription());
@@ -182,7 +183,7 @@ public class ItemServiceTests {
         Long id = itemService.create(itemOwner.getId(),
                 new NewItemDto(TEST_ITEM.getName() + "  ",
                         "  " + TEST_ITEM.getDescription(),
-                        true))
+                        true, null))
                 .getId();
 
         TypedQuery<Item> query = em.createQuery("select i from Item i where id = :id", Item.class);

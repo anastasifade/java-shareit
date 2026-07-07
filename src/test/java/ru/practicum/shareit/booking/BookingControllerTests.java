@@ -16,7 +16,7 @@ import ru.practicum.shareit.booking.model.BookingSearch;
 import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.error.ErrorHandler;
-import ru.practicum.shareit.item.dto.item.BookingItemDto;
+import ru.practicum.shareit.item.dto.item.ItemNameDto;
 import ru.practicum.shareit.user.dto.ResponseUserDto;
 
 import java.nio.charset.StandardCharsets;
@@ -43,7 +43,7 @@ public class BookingControllerTests {
 
     private static final ResponseBookingDto RESPONSE_DTO = ResponseBookingDto.builder()
             .id(1L)
-            .item(BookingItemDto.builder().id(1L).name("name").build())
+            .item(ItemNameDto.builder().id(1L).name("name").build())
             .booker(ResponseUserDto.builder().id(1L).name("username").email("a@b.c").build())
             .start(FUTURE_START_DATE)
             .end(FUTURE_END_DATE)

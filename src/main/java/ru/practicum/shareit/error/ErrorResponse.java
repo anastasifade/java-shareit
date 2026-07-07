@@ -4,5 +4,5 @@ import lombok.Value;
 
 @Value
 public final class ErrorResponse {
-    String message;
+    String error;
 }
