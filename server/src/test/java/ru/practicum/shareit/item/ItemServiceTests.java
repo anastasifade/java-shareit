@@ -22,6 +22,8 @@ import ru.practicum.shareit.item.dto.item.UpdateItemDto;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
+import ru.practicum.shareit.request.dal.RequestRepository;
+import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.dal.UserRepository;
 import ru.practicum.shareit.user.model.User;
 
@@ -44,6 +46,7 @@ public class ItemServiceTests {
     private final ItemService itemService;
     private final BookingRepository bookingRepository;
     private final UserRepository userRepository;
+    private final RequestRepository requestRepository;
 
     private final EntityManager em;
 
@@ -176,6 +179,24 @@ public class ItemServiceTests {
         assertThat(item.getOwner().getId(), is(itemOwner.getId()));
         assertThat(item.getName(), is(TEST_ITEM.getName()));
         assertThat(item.getDescription(), is(TEST_ITEM.getDescription()));
+    }
+
+    @Test
+    void createItemOnRequest_shouldCreateItem_withNotNullRequestField() {
+        ItemRequest request = new ItemRequest();
+        request.setCreated(LocalDateTime.now());
+        request.setRequestor(itemViewer);
+        request.setDescription("desc");
+        request = requestRepository.save(request);
+
+        NewItemDto dto = new NewItemDto("a", "b", true, request.getId());
+
+        Long itemId = itemService.create(itemOwner.getId(), dto).getId();
+
+        TypedQuery<Item> query = em.createQuery("select i from Item i where id = :id", Item.class);
+        Item item = query.setParameter("id", itemId).getSingleResult();
+
+        assertThat(item.getRequest().getId(), is(request.getId()));
     }
 
     @Test

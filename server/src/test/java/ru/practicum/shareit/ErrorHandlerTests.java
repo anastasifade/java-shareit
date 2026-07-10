@@ -69,4 +69,13 @@ public class ErrorHandlerTests {
         mvc.perform(get(URL))
                 .andExpect(status().isForbidden());
     }
+
+    @Test
+    void test_unexpectedException() throws Exception {
+        when(service.findAll())
+                .thenThrow(RuntimeException.class);
+
+        mvc.perform(get(URL))
+                .andExpect(status().isInternalServerError());
+    }
 }
