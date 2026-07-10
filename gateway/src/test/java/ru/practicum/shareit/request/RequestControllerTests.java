@@ -1,4 +1,4 @@
-package ru.practicum.shareit;
+package ru.practicum.shareit.request;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -9,9 +9,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.shareit.error.ErrorHandler;
-import ru.practicum.shareit.request.RequestClient;
-import ru.practicum.shareit.request.RequestController;
-import ru.practicum.shareit.request.ItemRequestDto;
 
 import java.nio.charset.StandardCharsets;
 

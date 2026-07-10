@@ -1,4 +1,4 @@
-package ru.practicum.shareit;
+package ru.practicum.shareit.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -9,10 +9,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.shareit.error.ErrorHandler;
-import ru.practicum.shareit.user.NewUserDto;
-import ru.practicum.shareit.user.UpdateUserDto;
-import ru.practicum.shareit.user.UserClient;
-import ru.practicum.shareit.user.UserController;
 
 import java.nio.charset.StandardCharsets;
 
