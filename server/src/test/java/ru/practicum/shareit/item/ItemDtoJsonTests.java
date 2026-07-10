@@ -11,9 +11,7 @@ import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.item.dto.item.ItemNameDto;
 import ru.practicum.shareit.item.dto.item.OwnerItemDto;
 import ru.practicum.shareit.item.dto.item.ResponseItemDto;
-import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.dto.ResponseUserDto;
-import ru.practicum.shareit.user.model.User;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -101,5 +99,4 @@ public class ItemDtoJsonTests {
         assertThat(content).extractingJsonPathValue("$.lastBooking").hasFieldOrProperty("start");
         assertThat(content).extractingJsonPathValue("$.lastBooking").hasFieldOrProperty("end");
     }
-
 }
