@@ -196,7 +196,7 @@ class BookingClientTests {
         ArgumentCaptor<HttpEntity<?>> entityCaptor = ArgumentCaptor.forClass(HttpEntity.class);
         verify(restTemplate).exchange(anyString(), eq(HttpMethod.PATCH), entityCaptor.capture(), eq(Object.class), anyMap());
         HttpEntity<?> entity = entityCaptor.getValue();
-        assertThat(entity.getBody()).isNull(); 
+        assertThat(entity.getBody()).isNull();
         assertThat(entity.getHeaders().get("X-Sharer-User-Id")).containsExactly(String.valueOf(userId));
     }
 
