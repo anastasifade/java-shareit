@@ -53,7 +53,7 @@ public class ItemClient extends BaseClient {
         return patch(String.format("/%d", itemId), userId, dto);
     }
 
-    public ResponseEntity<Object> deleteItem(long userId, long itemId) {
-        return delete(String.format("/%d", itemId), userId);
+    public void deleteItem(long userId, long itemId) {
+        delete(String.format("/%d", itemId), userId);
     }
 }

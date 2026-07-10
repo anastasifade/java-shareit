@@ -15,6 +15,7 @@ import ru.practicum.shareit.user.UserClient;
 import ru.practicum.shareit.user.UserController;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
@@ -35,6 +36,49 @@ public class UserControllerTests {
     private final ObjectMapper mapper;
     private final MockMvc mvc;
 
+    @Test
+    void testFindAll() throws Exception {
+        when(client.findAll())
+                .thenReturn(null);
+
+        mvc.perform(get(USERS_URL)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        verify(client).findAll();
+    }
+
+    @Test
+    void testFindById() throws Exception {
+        when(client.findById(anyLong()))
+                .thenReturn(null);
+
+        mvc.perform(get(USERS_URL + "/1")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        verify(client).findById(1L);
+    }
+
+
+    // POST
+
+    @Test
+    void testCreateValidUser() throws Exception {
+        NewUserDto userDto = new NewUserDto("A", "B@mail.ru");
+
+        when(client.create(any()))
+                .thenReturn(null);
+
+        mvc.perform(post(USERS_URL)
+                        .content(mapper.writeValueAsString(userDto))
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+
+        verify(client).create(userDto);
+    }
 
     @Test
     void testCreateUser_InvalidName() throws Exception {
@@ -73,6 +117,22 @@ public class UserControllerTests {
         verifyNoInteractions(client);
     }
 
+    @Test
+    void testPatchUser_validDto() throws Exception {
+        UpdateUserDto dto = new UpdateUserDto(null, "new@email.com");
+
+        when(client.update(anyLong(), any()))
+                .thenReturn(null);
+
+        mvc.perform(patch(USERS_URL + "/1")
+                        .content(mapper.writeValueAsString(dto))
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        verify(client).update(1L, dto);
+    }
 
     @Test
     void testPatchUser_invalidName() throws Exception {
@@ -102,6 +162,17 @@ public class UserControllerTests {
                 .andExpect(jsonPath("$.error", is("[Validation error: invalid email format.]")));
 
         verifyNoInteractions(client);
+    }
+
+    @Test
+    void testDeleteUser() throws Exception {
+        doNothing()
+                .when(client).deleteUser(anyLong());
+
+        mvc.perform(delete(USERS_URL + "/1"))
+                .andExpect(status().isNoContent());
+
+        verify(client).deleteUser(1L);
     }
 
 }
