@@ -15,7 +15,6 @@ import ru.practicum.shareit.user.UserClient;
 import ru.practicum.shareit.user.UserController;
 
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
